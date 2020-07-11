@@ -1140,7 +1140,7 @@ GameObject:
   - component: {fileID: 1341587770471655413}
   - component: {fileID: 58814195984856328}
   m_Layer: 0
-  m_Name: Grass With Puddle
+  m_Name: Grass with Puddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
