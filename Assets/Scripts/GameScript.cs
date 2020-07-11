@@ -17,14 +17,20 @@ public class GameScript : MonoBehaviour
     private const int obstaclesPerTileMax = 6;
     private const float obstacleXRange = 7f;
 
+    private const int obstacleLayer = 8;
+
+    private const float mouseDragFactor = 0.05f;
+
 
 
     private GameObject playerPrefab;
     private GameObject obstacleWrapperPrefab;
+    private GameObject outlinePrefab;
     private List<List<GameObject>> groundTilePrefabs = new List<List<GameObject>>();
     private List<List<GameObject>> obstaclePrefabs = new List<List<GameObject>>();
 
     private GameObject player;
+    private new Camera camera;
     private List<GameObject> groundTiles = new List<GameObject>();
     private List<GameObject> obstacles = new List<GameObject>();
 
@@ -32,6 +38,12 @@ public class GameScript : MonoBehaviour
 
     private int nextTileCount;
     private float nextTileSpawnThreshold;
+
+    private bool selected;
+    private GameObject hoveredObject;
+    private List<GameObject> outlines = new List<GameObject>();
+
+    private Vector3 lastMousePosition = new Vector3(0, 0, 0);
 
 
     
@@ -44,6 +56,7 @@ public class GameScript : MonoBehaviour
         }
         playerPrefab = Resources.Load<GameObject>("Player");
         obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
+        outlinePrefab = Resources.Load<GameObject>("Outline");
     }
 
     void Start()
@@ -55,8 +68,11 @@ public class GameScript : MonoBehaviour
         distance = 0;
         nextTileCount = 0;
         nextTileSpawnThreshold = tileSize;
+        hoveredObject = null;
+        selected = false;
 
         player = Instantiate(playerPrefab);
+        camera = player.transform.Find("Camera").GetComponent<Camera>();
         for (int i = 0; i < numTilesAtOnce; i++)
         {
             SpawnNextTile();
@@ -69,6 +85,16 @@ public class GameScript : MonoBehaviour
         GameObject obstacleWrapper = Instantiate(obstacleWrapperPrefab, tile.transform);
         GameObject obstacle = Instantiate(obstaclePrefab, obstacleWrapper.transform);
         obstacleWrapper.transform.localPosition = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
+        
+        AddMeshCollider(obstacle);
+    }
+
+    private void AddMeshCollider(GameObject obj) {
+        obj.AddComponent<MeshCollider>();
+        obj.layer = obstacleLayer;
+        foreach(Transform child in obj.transform) {
+            AddMeshCollider(child.gameObject);
+        }
     }
 
     private void SpawnNextTile() {
@@ -106,9 +132,66 @@ public class GameScript : MonoBehaviour
             DespawnLastTile();
             SpawnNextTile();
         }
+
+
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if(selected) {
+            if(!Input.GetMouseButton(0)) {
+                selected = false;
+            } else {
+                float mouseDeltaX = (Input.mousePosition - lastMousePosition).x;
+                hoveredObject.transform.Translate(mouseDeltaX * mouseDragFactor, 0, 0);
+            }
+        } else {
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << obstacleLayer)) {
+                hit.transform.SendMessageUpwards("OnHover", this);
+
+                if(Input.GetMouseButton(0)) {
+                    selected = true;
+                }
+            } else {
+                OnHover(null);
+            }
+        }
+
+        lastMousePosition = Input.mousePosition;
+    }
+
+    public void OnHover(GameObject newHoveredObject) {
+        if(hoveredObject == newHoveredObject) return;
+
+        hoveredObject = newHoveredObject;
+
+        foreach(GameObject outline in outlines) {
+            Destroy(outline);
+        }
+        outlines.Clear();
+
+        if(hoveredObject != null) {
+            Outline(hoveredObject.transform);
+        }
+    }
+
+    private void Outline(Transform parent) {
+        if(parent.tag == "Outline") return;
+
+        MeshFilter meshFilter = parent.GetComponent<MeshFilter>();
+        if(meshFilter != null) {
+            GameObject outline = Instantiate(outlinePrefab, parent);
+            outline.GetComponent<MeshFilter>().mesh = meshFilter.mesh;
+            outlines.Add(outline);
+        }
+
+        foreach (Transform child in parent)
+        {
+            Outline(child);
+        }
     }
 
     public void EndGame() {
+        OnHover(null);
         Destroy(player);
         foreach (GameObject groundTile in groundTiles)
         {
