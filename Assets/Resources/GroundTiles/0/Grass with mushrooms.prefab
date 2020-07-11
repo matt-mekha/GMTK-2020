@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1341587770471655413}
   - component: {fileID: 58814195984856328}
   m_Layer: 0
-  m_Name: Grass
+  m_Name: Grass with mushrooms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 035cb3f28ffebd54da710412dcc994de, type: 2}
+  - {fileID: 2100000, guid: 5d8af8f434f69794eabd684fb44b4fbf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
