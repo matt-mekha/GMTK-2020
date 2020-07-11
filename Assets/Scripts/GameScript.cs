@@ -33,6 +33,7 @@ public class GameScript : MonoBehaviour
     private GameObject outlinePrefab;
     private List<List<GameObject>> groundTilePrefabs = new List<List<GameObject>>();
     private List<List<GameObject>> obstaclePrefabs = new List<List<GameObject>>();
+    private List<GameObject> transitionTilePrefabs = new List<GameObject>();
 
     private GameObject player;
     private new Camera camera;
@@ -52,6 +53,8 @@ public class GameScript : MonoBehaviour
 
     public static bool alive = false;
 
+    private int lastStageSpawned;
+
 
     
     void Awake()
@@ -60,6 +63,7 @@ public class GameScript : MonoBehaviour
         {
             groundTilePrefabs.Add(new List<GameObject>(Resources.LoadAll<GameObject>("GroundTiles/"+i)));
             obstaclePrefabs.Add(new List<GameObject>(Resources.LoadAll<GameObject>("Obstacles/"+i)));
+            transitionTilePrefabs.Add(Resources.Load<GameObject>("GroundTiles/T"+i));
         }
         playerPrefab = Resources.Load<GameObject>("Player");
         obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
@@ -78,6 +82,7 @@ public class GameScript : MonoBehaviour
         hoveredObject = null;
         selected = false;
         alive = true;
+        lastStageSpawned = startStage;
 
         player = Instantiate(playerPrefab);
         player.GetComponentInChildren<PlayerScript>().gameScript = this;
@@ -111,8 +116,16 @@ public class GameScript : MonoBehaviour
     private void SpawnNextTile() {
         int stage = (nextTileCount / tilesPerStage + startStage) % numStages;
 
-        List<GameObject> tilePool = groundTilePrefabs[stage];
-        GameObject tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
+        GameObject tilePrefab;
+        bool transition = stage != lastStageSpawned;
+        if(transition) {
+            tilePrefab = transitionTilePrefabs[lastStageSpawned];
+        } else {
+            List<GameObject> tilePool = groundTilePrefabs[stage];
+            tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
+        }
+
+        
         GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
 
         RemoveColliders(tile.transform);
@@ -120,7 +133,7 @@ public class GameScript : MonoBehaviour
         tile.AddComponent<MeshCollider>();
         groundTiles.Add(tile);
 
-        if(nextTileCount >= numEmptyTiles) {
+        if(nextTileCount >= numEmptyTiles && !transition) {
             int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
             for (int i = 0; i < numObstacles; i++)
             {
@@ -129,6 +142,7 @@ public class GameScript : MonoBehaviour
         }
 
         nextTileCount++;
+        lastStageSpawned = stage;
     }
 
     private void RemoveColliders(Transform parent) {
