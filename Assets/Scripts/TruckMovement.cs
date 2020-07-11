@@ -15,11 +15,13 @@ public class TruckMovement : MonoBehaviour
     private float x = 0;
     private float y = 0;
     private Vector3 startPos;
+    private Quaternion startRotation;
 
     public GameObject[] wheels;
 
     void Start() {
         startPos = transform.localPosition;
+        startRotation = transform.localRotation;
     }
 
     void Update()
@@ -30,6 +32,7 @@ public class TruckMovement : MonoBehaviour
         y += Time.deltaTime * noiseFrequencyY;
 
         transform.localPosition = startPos + new Vector3(Mathf.PerlinNoise(x, 0) * noiseAmplitudeX, Mathf.PerlinNoise(0, y) * noiseAmplitudeY, 0);
+        transform.rotation = startRotation;
 
         float wheelDelta = Time.deltaTime * wheelRotationSpeed;
         foreach (GameObject wheel in wheels)
