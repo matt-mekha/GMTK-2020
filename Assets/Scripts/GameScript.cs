@@ -19,6 +19,8 @@ public class GameScript : MonoBehaviour
 
     private const int obstacleLayer = 8;
 
+    private const float mouseDragFactor = 0.05f;
+
 
 
     private GameObject playerPrefab;
@@ -37,8 +39,11 @@ public class GameScript : MonoBehaviour
     private int nextTileCount;
     private float nextTileSpawnThreshold;
 
+    private bool selected;
     private GameObject hoveredObject;
     private List<GameObject> outlines = new List<GameObject>();
+
+    private Vector3 lastMousePosition = new Vector3(0, 0, 0);
 
 
     
@@ -64,6 +69,7 @@ public class GameScript : MonoBehaviour
         nextTileCount = 0;
         nextTileSpawnThreshold = tileSize;
         hoveredObject = null;
+        selected = false;
 
         player = Instantiate(playerPrefab);
         camera = player.transform.Find("Camera").GetComponent<Camera>();
@@ -131,11 +137,26 @@ public class GameScript : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << obstacleLayer)) {
-            hit.transform.SendMessageUpwards("OnHover", this);
+        if(selected) {
+            if(!Input.GetMouseButton(0)) {
+                selected = false;
+            } else {
+                float mouseDeltaX = (Input.mousePosition - lastMousePosition).x;
+                hoveredObject.transform.Translate(mouseDeltaX * mouseDragFactor, 0, 0);
+            }
         } else {
-            OnHover(null);
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << obstacleLayer)) {
+                hit.transform.SendMessageUpwards("OnHover", this);
+
+                if(Input.GetMouseButton(0)) {
+                    selected = true;
+                }
+            } else {
+                OnHover(null);
+            }
         }
+
+        lastMousePosition = Input.mousePosition;
     }
 
     public void OnHover(GameObject newHoveredObject) {
