@@ -12,9 +12,14 @@ public class GameScript : MonoBehaviour
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
 
+    private const int obstaclesPerTileMin = 3;
+    private const int obstaclesPerTileMax = 6;
+    private const float obstacleXRange = 7f;
+
 
 
     private GameObject playerPrefab;
+    private GameObject obstacleWrapperPrefab;
     private List<List<GameObject>> groundTilePrefabs = new List<List<GameObject>>();
     private List<List<GameObject>> obstaclePrefabs = new List<List<GameObject>>();
 
@@ -23,6 +28,7 @@ public class GameScript : MonoBehaviour
     private List<GameObject> obstacles = new List<GameObject>();
 
     private float distance;
+
     private int nextTileCount;
     private float nextTileSpawnThreshold;
 
@@ -36,6 +42,7 @@ public class GameScript : MonoBehaviour
             obstaclePrefabs.Add(new List<GameObject>(Resources.LoadAll<GameObject>("Obstacles/"+i)));
         }
         playerPrefab = Resources.Load<GameObject>("Player");
+        obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
     }
 
     void Start()
@@ -55,6 +62,14 @@ public class GameScript : MonoBehaviour
         }
     }
 
+    private void SpawnObstacle(GameObject tile, int stage) {
+        List<GameObject> obstaclePool = obstaclePrefabs[stage];
+        GameObject obstaclePrefab = obstaclePool[Random.Range(0, obstaclePool.Count)];
+        GameObject obstacleWrapper = Instantiate(obstacleWrapperPrefab, tile.transform);
+        GameObject obstacle = Instantiate(obstaclePrefab, obstacleWrapper.transform);
+        obstacleWrapper.transform.localPosition = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
+    }
+
     private void SpawnNextTile() {
         int stage = (nextTileCount / tilesPerStage) % numStages;
 
@@ -64,6 +79,12 @@ public class GameScript : MonoBehaviour
         groundTiles.Add(tile);
 
         nextTileCount++;
+
+        int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
+        for (int i = 0; i < numObstacles; i++)
+        {
+            SpawnObstacle(tile, stage);
+        }
     }
 
     private void DespawnLastTile() {
