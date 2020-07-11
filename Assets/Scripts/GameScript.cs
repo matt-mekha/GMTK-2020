@@ -11,15 +11,20 @@ public class GameScript : MonoBehaviour
     private const int tilesPerStage = 5;
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
-    private const int startStage = 0; // TODO should be 0
+    private const int startStage = 0; // for testing, should be 0
+    private const int numEmptyTiles = 1;
 
     private const int obstaclesPerTileMin = 3;
     private const int obstaclesPerTileMax = 6;
     private const float obstacleXRange = 7f;
 
-    private const int obstacleLayer = 8;
+    public const int obstacleLayer = 8;
 
     private const float mouseDragFactor = 0.05f;
+
+    private const float explosionForce = 4;
+    private const float explosionRadius = 1;
+    private const float explosionUpwardsFactor = -1;
 
 
 
@@ -44,6 +49,8 @@ public class GameScript : MonoBehaviour
     private List<GameObject> outlines = new List<GameObject>();
 
     private Vector3 lastMousePosition = new Vector3(0, 0, 0);
+
+    public static bool alive = false;
 
 
     
@@ -70,8 +77,10 @@ public class GameScript : MonoBehaviour
         nextTileSpawnThreshold = tileSize;
         hoveredObject = null;
         selected = false;
+        alive = true;
 
         player = Instantiate(playerPrefab);
+        player.GetComponentInChildren<PlayerScript>().gameScript = this;
         camera = player.transform.Find("Camera").GetComponent<Camera>();
         for (int i = 0; i < numTilesAtOnce; i++)
         {
@@ -86,14 +95,16 @@ public class GameScript : MonoBehaviour
         GameObject obstacle = Instantiate(obstaclePrefab, obstacleWrapper.transform);
         obstacleWrapper.transform.localPosition = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
         
-        AddMeshCollider(obstacle);
+        AddObstacleComponents(obstacle);
     }
 
-    private void AddMeshCollider(GameObject obj) {
-        obj.AddComponent<MeshCollider>();
+    private void AddObstacleComponents(GameObject obj) {
+        MeshCollider collider = obj.AddComponent<MeshCollider>();
+        collider.convex = true;
+
         obj.layer = obstacleLayer;
         foreach(Transform child in obj.transform) {
-            AddMeshCollider(child.gameObject);
+            AddObstacleComponents(child.gameObject);
         }
     }
 
@@ -103,15 +114,18 @@ public class GameScript : MonoBehaviour
         List<GameObject> tilePool = groundTilePrefabs[stage];
         GameObject tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
         GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
+        tile.AddComponent<MeshCollider>();
         groundTiles.Add(tile);
 
-        nextTileCount++;
-
-        int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
-        for (int i = 0; i < numObstacles; i++)
-        {
-            SpawnObstacle(tile, stage);
+        if(nextTileCount >= numEmptyTiles) {
+            int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
+            for (int i = 0; i < numObstacles; i++)
+            {
+                SpawnObstacle(tile, stage);
+            }
         }
+
+        nextTileCount++;
     }
 
     private void DespawnLastTile() {
@@ -122,6 +136,8 @@ public class GameScript : MonoBehaviour
 
     void Update()
     {
+        if(!alive) return;
+        
         float move = speed * Time.deltaTime;
         distance += move;
 
@@ -190,8 +206,22 @@ public class GameScript : MonoBehaviour
         }
     }
 
-    public void EndGame() {
+    public void OnCollision(Collision collision) {
+        if((!alive) || collision.gameObject.layer != obstacleLayer) return;
+
+        alive = false;
         OnHover(null);
+
+        AddExplosionForce(player.GetComponentInChildren<Rigidbody>(), collision);
+        AddExplosionForce(collision.GetContact(0).otherCollider.gameObject.AddComponent<Rigidbody>(), collision);
+    }
+
+    private void AddExplosionForce(Rigidbody rb, Collision collision) {
+        rb.useGravity = true;
+        rb.AddExplosionForce(explosionForce, collision.GetContact(0).point, explosionRadius, explosionUpwardsFactor, ForceMode.Impulse);
+    }
+
+    public void EndGame() {
         Destroy(player);
         foreach (GameObject groundTile in groundTiles)
         {
