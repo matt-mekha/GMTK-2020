@@ -114,6 +114,9 @@ public class GameScript : MonoBehaviour
         List<GameObject> tilePool = groundTilePrefabs[stage];
         GameObject tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
         GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
+
+        RemoveColliders(tile.transform);
+
         tile.AddComponent<MeshCollider>();
         groundTiles.Add(tile);
 
@@ -126,6 +129,15 @@ public class GameScript : MonoBehaviour
         }
 
         nextTileCount++;
+    }
+
+    private void RemoveColliders(Transform parent) {
+        MeshCollider mc = parent.GetComponent<MeshCollider>();
+        if(mc != null) Destroy(mc);
+
+        foreach(Transform child in parent) {
+            RemoveColliders(child);
+        }
     }
 
     private void DespawnLastTile() {
