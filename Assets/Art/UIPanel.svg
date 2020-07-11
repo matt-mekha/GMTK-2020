@@ -18,13 +18,12 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="UIPlayButton.svg">
+   sodipodi:docname="UIPanel.svg">
   <defs
      id="defs2">
     <linearGradient
        osb:paint="gradient"
-       id="linearGradient854"
-       inkscape:collect="always">
+       id="linearGradient854">
       <stop
          style="stop-color:#6761ff;stop-opacity:1;"
          offset="0"
@@ -35,6 +34,7 @@
          id="stop850" />
     </linearGradient>
     <radialGradient
+       gradientTransform="matrix(3.9437094,0,0,3.9437094,0.47659223,0.47659222)"
        gradientUnits="userSpaceOnUse"
        r="8.4666672"
        fy="8.4666672"
@@ -44,19 +44,6 @@
        id="radialGradient2829"
        xlink:href="#linearGradient854"
        inkscape:collect="always" />
-    <filter
-       height="1.0000999"
-       y="-4.9948412e-05"
-       width="1.0000999"
-       x="-4.9948412e-05"
-       id="filter3337"
-       style="color-interpolation-filters:sRGB"
-       inkscape:collect="always">
-      <feGaussianBlur
-         id="feGaussianBlur3339"
-         stdDeviation="0.00034699206"
-         inkscape:collect="always" />
-    </filter>
   </defs>
   <sodipodi:namedview
      inkscape:pagecheckerboard="true"
@@ -87,7 +74,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -96,13 +83,12 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       transform="matrix(4.0620579,0,0,4.0621697,-0.52553843,-0.52590086)"
-       ry="3.0703297"
-       y="0.13025624"
-       x="0.13025624"
-       height="16.672821"
-       width="16.672821"
+       ry="12.108488"
+       y="0.99028498"
+       x="0.99028498"
+       height="65.752762"
+       width="65.752762"
        id="rect7"
-       style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.502211;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3337)" />
+       style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.98057;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
