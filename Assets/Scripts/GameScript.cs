@@ -9,6 +9,7 @@ public class GameScript : MonoBehaviour
 
     private const float tileSize = 100f;
     private const int tilesPerStage = 5;
+    private const int numTilesAtOnce = 7;
     private const int numStages = 3;
 
 
@@ -21,7 +22,9 @@ public class GameScript : MonoBehaviour
     private List<GameObject> groundTiles = new List<GameObject>();
     private List<GameObject> obstacles = new List<GameObject>();
 
-    private float distance = 0;
+    private float distance;
+    private int nextTileCount;
+    private float nextTileSpawnThreshold;
 
 
     
@@ -41,7 +44,32 @@ public class GameScript : MonoBehaviour
     }
 
     public void StartGame() {
+        distance = 0;
+        nextTileCount = 0;
+        nextTileSpawnThreshold = tileSize;
+
         player = Instantiate(playerPrefab);
+        for (int i = 0; i < numTilesAtOnce; i++)
+        {
+            SpawnNextTile();
+        }
+    }
+
+    private void SpawnNextTile() {
+        int stage = (nextTileCount / tilesPerStage) % numStages;
+
+        List<GameObject> tilePool = groundTilePrefabs[stage];
+        GameObject tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
+        GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
+        groundTiles.Add(tile);
+
+        nextTileCount++;
+    }
+
+    private void DespawnLastTile() {
+        GameObject tile = groundTiles[0];
+        groundTiles.RemoveAt(0);
+        Destroy(tile);
     }
 
     void Update()
@@ -50,6 +78,12 @@ public class GameScript : MonoBehaviour
         distance += move;
 
         player.transform.Translate(0, 0, move);
+
+        while (distance >= nextTileSpawnThreshold) {
+            nextTileSpawnThreshold += tileSize;
+            DespawnLastTile();
+            SpawnNextTile();
+        }
     }
 
     public void EndGame() {
