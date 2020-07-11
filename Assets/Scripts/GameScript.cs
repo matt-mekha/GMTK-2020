@@ -11,6 +11,7 @@ public class GameScript : MonoBehaviour
     private const int tilesPerStage = 5;
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
+    private const int startStage = 0; // TODO should be 0
 
     private const int obstaclesPerTileMin = 3;
     private const int obstaclesPerTileMax = 6;
@@ -71,7 +72,7 @@ public class GameScript : MonoBehaviour
     }
 
     private void SpawnNextTile() {
-        int stage = (nextTileCount / tilesPerStage) % numStages;
+        int stage = (nextTileCount / tilesPerStage + startStage) % numStages;
 
         List<GameObject> tilePool = groundTilePrefabs[stage];
         GameObject tilePrefab = tilePool[Random.Range(0, tilePool.Count)];
