@@ -7,7 +7,7 @@ public class SceneScript : MonoBehaviour
 
     private const float speed = 40f;
 
-    private const int numTiles = 7;
+    private const int numTiles = 10;
     private const float tileSize = 100f;
 
     private int nextTile = 0;
