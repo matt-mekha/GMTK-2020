@@ -333,6 +333,8 @@ public class GameScript : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if(!alive) return;
+
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
