@@ -330,10 +330,6 @@ public class GameScript : MonoBehaviour
             GetSound("Honk").Play();
             nextHonk += Random.Range(nextHonkMin, nextHonkMax);
         }
-    }
-
-    void FixedUpdate() {
-        if(!alive) return;
 
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
