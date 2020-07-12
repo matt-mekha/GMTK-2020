@@ -61,6 +61,8 @@ public class GameScript : MonoBehaviour
     public GameObject gameOverFolder;
     public Text gameOverScoreText;
 
+    private Collision collisionCache;
+
 
     
     void Awake()
@@ -121,6 +123,11 @@ public class GameScript : MonoBehaviour
         obstacleWrapper.transform.localPosition = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
         
         AddObstacleComponents(obstacle);
+
+        Rigidbody rb = obstacle.AddComponent<Rigidbody>();
+        rb.mass = 3;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX
+                       | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void AddObstacleComponents(GameObject obj) {
@@ -260,10 +267,15 @@ public class GameScript : MonoBehaviour
         alive = false;
         OnHover(null);
 
-        AddExplosionForce(player.GetComponentInChildren<Rigidbody>(), collision);
-        AddExplosionForce(collision.GetContact(0).otherCollider.gameObject.AddComponent<Rigidbody>(), collision);
+        collisionCache = collision;
+        AddExplosionForce(player.GetComponentInChildren<Rigidbody>());
+        collision.GetContact(0).otherCollider.gameObject.SendMessageUpwards("OnCollision", this);
 
         StartCoroutine(GameOver());
+    }
+
+    public void OnCollision(Rigidbody rb) {
+        AddExplosionForce(rb);
     }
 
     private IEnumerator GameOver() {
@@ -274,9 +286,10 @@ public class GameScript : MonoBehaviour
         gameOverScoreText.text = "Score: " + Mathf.RoundToInt(distance);
     }
 
-    private void AddExplosionForce(Rigidbody rb, Collision collision) {
+    private void AddExplosionForce(Rigidbody rb) {
         rb.useGravity = true;
-        rb.AddExplosionForce(explosionForce, collision.GetContact(0).point, explosionRadius, explosionUpwardsFactor, ForceMode.Impulse);
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddExplosionForce(explosionForce, collisionCache.GetContact(0).point, explosionRadius, explosionUpwardsFactor, ForceMode.Impulse);
     }
 
     public void CleanUp() {

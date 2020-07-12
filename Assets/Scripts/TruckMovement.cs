@@ -19,6 +19,8 @@ public class TruckMovement : MonoBehaviour
 
     public GameObject[] wheels;
 
+    public bool mainMenu = false;
+
     void Start() {
         startPos = transform.localPosition;
         startRotation = transform.localRotation;
@@ -26,7 +28,7 @@ public class TruckMovement : MonoBehaviour
 
     void Update()
     {
-        if(!GameScript.alive) return;
+        if((!mainMenu) && (!GameScript.alive)) return;
 
         x += Time.deltaTime * noiseFrequencyX;
         y += Time.deltaTime * noiseFrequencyY;
