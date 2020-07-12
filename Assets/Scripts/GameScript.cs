@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class GameScript : MonoBehaviour
 {
@@ -67,6 +68,7 @@ public class GameScript : MonoBehaviour
     public GameObject inGameFolder;
     public GameObject gameOverFolder;
     public Text gameOverScoreText;
+    public Text gameOverHighScoreText;
 
     public Transform soundFolder;
 
@@ -79,6 +81,11 @@ public class GameScript : MonoBehaviour
 
     private float nextHonk;
     private float honkTime;
+
+    private string path;
+
+    private int highScoreNormal = 0;
+    private int highScoreExpert = 0;
 
 
     
@@ -94,6 +101,25 @@ public class GameScript : MonoBehaviour
         mountainPrefab = Resources.Load<GameObject>("GroundTiles/Mountains");
         obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
         outlinePrefab = Resources.Load<GameObject>("Outline");
+
+        path = Application.persistentDataPath + "/highScore.txt";
+        Load();
+    }
+    
+    void Save() {
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.WriteLine(highScoreNormal);
+        writer.WriteLine(highScoreExpert);
+        writer.Close();
+    }
+
+    void Load() {
+        if(File.Exists(path)) {
+            StreamReader reader = new StreamReader(path);
+            highScoreNormal = System.Convert.ToInt32(reader.ReadLine());
+            highScoreExpert = System.Convert.ToInt32(reader.ReadLine());
+            reader.Close();
+        }
     }
 
     private AudioSource GetSound(string name) {
@@ -386,10 +412,26 @@ public class GameScript : MonoBehaviour
 
     private IEnumerator GameOver() {
         yield return new WaitForSeconds(2);
+
+        int score = Mathf.RoundToInt(distance);
         
         inGameFolder.SetActive(false);
         gameOverFolder.SetActive(true);
-        gameOverScoreText.text = "Score: " + Mathf.RoundToInt(distance);
+        gameOverScoreText.text = "Score: " + score;
+
+        if(expertMode) {
+            if(score > highScoreExpert) {
+                highScoreExpert = score;
+                Save();
+            }
+            gameOverHighScoreText.text = "High score: " + highScoreExpert;
+        } else {
+            if(score > highScoreNormal) {
+                highScoreNormal = score;
+                Save();
+            }
+            gameOverHighScoreText.text = "High score: " + highScoreNormal;
+        }
 
         GetSound("GameOver").Play();
     }
