@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
 {
@@ -55,7 +56,10 @@ public class GameScript : MonoBehaviour
 
     private int lastStageSpawned;
 
-    public GameObject inGameScoreText;
+    public Text inGameScoreText;
+    public GameObject inGameFolder;
+    public GameObject gameOverFolder;
+    public Text gameOverScoreText;
 
 
     
@@ -85,6 +89,10 @@ public class GameScript : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    private void UpdateScore() {
+        inGameScoreText.text = "" + Mathf.RoundToInt(distance);
+    }
+
     public void StartGame(bool tutorial = false) {
         distance = 0;
         nextTileCount = 0;
@@ -93,6 +101,8 @@ public class GameScript : MonoBehaviour
         selected = false;
         alive = true;
         lastStageSpawned = startStage;
+
+        UpdateScore();
 
         player = Instantiate(playerPrefab);
         player.GetComponentInChildren<PlayerScript>().gameScript = this;
@@ -209,6 +219,8 @@ public class GameScript : MonoBehaviour
         }
 
         lastMousePosition = Input.mousePosition;
+
+        UpdateScore();
     }
 
     public void OnHover(GameObject newHoveredObject) {
@@ -250,6 +262,16 @@ public class GameScript : MonoBehaviour
 
         AddExplosionForce(player.GetComponentInChildren<Rigidbody>(), collision);
         AddExplosionForce(collision.GetContact(0).otherCollider.gameObject.AddComponent<Rigidbody>(), collision);
+
+        StartCoroutine(GameOver());
+    }
+
+    private IEnumerator GameOver() {
+        yield return new WaitForSeconds(2);
+        
+        inGameFolder.SetActive(false);
+        gameOverFolder.SetActive(true);
+        gameOverScoreText.text = "Score: " + Mathf.RoundToInt(distance);
     }
 
     private void AddExplosionForce(Rigidbody rb, Collision collision) {
@@ -257,7 +279,7 @@ public class GameScript : MonoBehaviour
         rb.AddExplosionForce(explosionForce, collision.GetContact(0).point, explosionRadius, explosionUpwardsFactor, ForceMode.Impulse);
     }
 
-    public void EndGame() {
+    public void CleanUp() {
         Destroy(player);
         foreach (GameObject groundTile in groundTiles)
         {
