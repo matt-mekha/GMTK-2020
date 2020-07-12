@@ -70,12 +70,20 @@ public class GameScript : MonoBehaviour
         outlinePrefab = Resources.Load<GameObject>("Outline");
     }
 
-    void Start()
+    public void Quit()
     {
-        StartGame();
+        Application.Quit();
     }
 
-    public void StartGame() {
+    public void Pause() {
+        Time.timeScale = 0;
+    }
+
+    public void Resume() {
+        Time.timeScale = 1;
+    }
+
+    public void StartGame(bool tutorial = false) {
         distance = 0;
         nextTileCount = 0;
         nextTileSpawnThreshold = tileSize;
