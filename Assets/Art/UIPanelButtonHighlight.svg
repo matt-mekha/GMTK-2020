@@ -9,14 +9,14 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="UIPanel.svg"
+   sodipodi:docname="UIPanelButtonHighlight.svg"
    inkscape:version="1.0rc1 (09960d6f05, 2020-04-09)"
    id="svg8"
    version="1.1"
    viewBox="0 0 67.733332 67.733336"
    height="256"
    width="256"
-   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPanel.png"
+   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPanelButtonHighlight.png"
    inkscape:export-xdpi="48"
    inkscape:export-ydpi="48">
   <defs
@@ -27,11 +27,11 @@
       <stop
          id="stop852"
          offset="0"
-         style="stop-color:#6761ff;stop-opacity:1;" />
+         style="stop-color:#b8fcfe;stop-opacity:1" />
       <stop
          id="stop850"
          offset="1"
-         style="stop-color:#2111a8;stop-opacity:1;" />
+         style="stop-color:#7faad8;stop-opacity:1" />
     </linearGradient>
     <radialGradient
        inkscape:collect="always"
