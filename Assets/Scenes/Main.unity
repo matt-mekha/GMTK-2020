@@ -4951,7 +4951,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Music: Purple Planet (purple-planet.com)'
+  m_Text: 'Made by Matthew, Rajiv, Sammy, and Evan
+
+
+    Music: Purple Planet (purple-planet.com)'
 --- !u!222 &1711432086
 CanvasRenderer:
   m_ObjectHideFlags: 0
