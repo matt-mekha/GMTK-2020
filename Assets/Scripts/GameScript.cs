@@ -6,14 +6,15 @@ using UnityEngine.UI;
 public class GameScript : MonoBehaviour
 {
 
-    private const float speed = 30f;
+    private const float startSpeed = 30f;
+    private const float acceleration = 0.1f;
 
     private const float tileSize = 100f;
     private const int tilesPerStage = 5;
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
     private const int startStage = 0; // for testing, should be 0
-    private const int numEmptyTiles = 1;
+    private const int numEmptyTiles = 2;
 
     private const int obstaclesPerTileMin = 3;
     private const int obstaclesPerTileMax = 6;
@@ -32,6 +33,7 @@ public class GameScript : MonoBehaviour
     private GameObject playerPrefab;
     private GameObject obstacleWrapperPrefab;
     private GameObject outlinePrefab;
+    private GameObject mountainPrefab;
     private List<List<GameObject>> groundTilePrefabs = new List<List<GameObject>>();
     private List<List<GameObject>> obstaclePrefabs = new List<List<GameObject>>();
     private List<GameObject> transitionTilePrefabs = new List<GameObject>();
@@ -42,6 +44,7 @@ public class GameScript : MonoBehaviour
     private List<GameObject> obstacles = new List<GameObject>();
 
     private float distance;
+    private float speed;
 
     private int nextTileCount;
     private float nextTileSpawnThreshold;
@@ -63,6 +66,8 @@ public class GameScript : MonoBehaviour
 
     private Collision collisionCache;
 
+    private bool tutorialSuccess;
+
 
     
     void Awake()
@@ -74,6 +79,7 @@ public class GameScript : MonoBehaviour
             transitionTilePrefabs.Add(Resources.Load<GameObject>("GroundTiles/T"+i));
         }
         playerPrefab = Resources.Load<GameObject>("Player");
+        mountainPrefab = Resources.Load<GameObject>("GroundTiles/Mountains");
         obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
         outlinePrefab = Resources.Load<GameObject>("Outline");
     }
@@ -103,6 +109,7 @@ public class GameScript : MonoBehaviour
         selected = false;
         alive = true;
         lastStageSpawned = startStage;
+        speed = startSpeed;
 
         UpdateScore();
 
@@ -111,16 +118,38 @@ public class GameScript : MonoBehaviour
         camera = player.transform.Find("Camera").GetComponent<Camera>();
         for (int i = 0; i < numTilesAtOnce; i++)
         {
-            SpawnNextTile();
+            GameObject tile = SpawnNextTile();
+            if(tutorial && i == 1) {
+                SpawnObstacle(tile, 0, true);
+            }
+        }
+
+        if(tutorial) {
+            StartCoroutine(Tutorial());
         }
     }
 
-    private void SpawnObstacle(GameObject tile, int stage) {
+    private IEnumerator Tutorial() {
+        tutorialSuccess = false;
+        yield return new WaitForSeconds(2.5f);
+        Time.timeScale = 0;
+        while(!tutorialSuccess) {
+            yield return new WaitForEndOfFrame();
+        }
+        Time.timeScale = 1;
+    }
+
+    private void SpawnObstacle(GameObject tile, int stage, bool tutorial = false) {
         List<GameObject> obstaclePool = obstaclePrefabs[stage];
         GameObject obstaclePrefab = obstaclePool[Random.Range(0, obstaclePool.Count)];
         GameObject obstacleWrapper = Instantiate(obstacleWrapperPrefab, tile.transform);
         GameObject obstacle = Instantiate(obstaclePrefab, obstacleWrapper.transform);
-        obstacleWrapper.transform.localPosition = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
+        
+        Vector3 pos = new Vector3(Random.Range(-obstacleXRange, obstacleXRange), 0, Random.Range(-tileSize/2, tileSize/2)) / 10f;
+        if(tutorial) {
+            pos = new Vector3(0, 0, 0);
+        }
+        obstacleWrapper.transform.localPosition = pos;
         
         AddObstacleComponents(obstacle);
 
@@ -140,7 +169,7 @@ public class GameScript : MonoBehaviour
         }
     }
 
-    private void SpawnNextTile() {
+    private GameObject SpawnNextTile() {
         int stage = (nextTileCount / tilesPerStage + startStage) % numStages;
 
         GameObject tilePrefab;
@@ -154,11 +183,14 @@ public class GameScript : MonoBehaviour
 
         
         GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
-
         RemoveColliders(tile.transform);
 
         tile.AddComponent<MeshCollider>();
         groundTiles.Add(tile);
+
+        GameObject mountainTile = Instantiate(mountainPrefab, tile.transform);
+        mountainTile.transform.localPosition = new Vector3(-10, 0, 0);
+        RemoveColliders(mountainTile.transform);
 
         if(nextTileCount >= numEmptyTiles && !transition) {
             int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
@@ -170,6 +202,8 @@ public class GameScript : MonoBehaviour
 
         nextTileCount++;
         lastStageSpawned = stage;
+
+        return tile;
     }
 
     private void RemoveColliders(Transform parent) {
@@ -190,6 +224,8 @@ public class GameScript : MonoBehaviour
     void Update()
     {
         if(!alive) return;
+
+        speed += acceleration * Time.deltaTime;
         
         float move = speed * Time.deltaTime;
         distance += move;
@@ -209,6 +245,7 @@ public class GameScript : MonoBehaviour
         if(selected) {
             if(!Input.GetMouseButton(0)) {
                 selected = false;
+                tutorialSuccess = true;
             } else {
                 float mouseDeltaX = (Input.mousePosition - lastMousePosition).x;
                 hoveredObject.transform.Translate(mouseDeltaX * mouseDragFactor, 0, 0);
