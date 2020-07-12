@@ -55,6 +55,8 @@ public class GameScript : MonoBehaviour
 
     private int lastStageSpawned;
 
+    public GameObject inGameScoreText;
+
 
     
     void Awake()
