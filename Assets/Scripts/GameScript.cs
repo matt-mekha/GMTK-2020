@@ -30,6 +30,9 @@ public class GameScript : MonoBehaviour
 
     private const float expertModeObstacleFactor = 1.5f;
 
+    private const float nextHonkMin = 2f;
+    private const float nextHonkMax = 8f;
+
 
     private GameObject playerPrefab;
     private GameObject obstacleWrapperPrefab;
@@ -74,6 +77,9 @@ public class GameScript : MonoBehaviour
 
     public static bool expertMode = false;
 
+    private float nextHonk;
+    private float honkTime;
+
 
     
     void Awake()
@@ -90,8 +96,8 @@ public class GameScript : MonoBehaviour
         outlinePrefab = Resources.Load<GameObject>("Outline");
     }
 
-    private void PlaySound(string name) {
-        soundFolder.Find(name).GetComponent<AudioSource>().Play();
+    private AudioSource GetSound(string name) {
+        return soundFolder.Find(name).GetComponent<AudioSource>();
     }
 
     public void Quit()
@@ -126,6 +132,8 @@ public class GameScript : MonoBehaviour
         alive = true;
         lastStageSpawned = startStage;
         speed = startSpeed;
+        nextHonk = nextHonkMin;
+        honkTime = 0;
 
         UpdateScore();
 
@@ -147,6 +155,8 @@ public class GameScript : MonoBehaviour
         if(tutorial) {
             StartCoroutine(Tutorial());
         }
+
+        GetSound("Engine").Play();
     }
 
     private IEnumerator Tutorial() {
@@ -314,6 +324,12 @@ public class GameScript : MonoBehaviour
         lastMousePosition = Input.mousePosition;
 
         UpdateScore();
+
+        honkTime += Time.deltaTime;
+        while (honkTime >= nextHonk) {
+            GetSound("Honk").Play();
+            nextHonk += Random.Range(nextHonkMin, nextHonkMax);
+        }
     }
 
     public void OnHover(GameObject newHoveredObject) {
@@ -358,7 +374,8 @@ public class GameScript : MonoBehaviour
         AddExplosionForce(player.GetComponentInChildren<Rigidbody>());
         collision.GetContact(0).otherCollider.gameObject.SendMessageUpwards("OnCollision", this);
 
-        PlaySound("Crash");
+        GetSound("Crash").Play();
+        GetSound("Music").Pause();
 
         StartCoroutine(GameOver());
     }
@@ -373,6 +390,8 @@ public class GameScript : MonoBehaviour
         inGameFolder.SetActive(false);
         gameOverFolder.SetActive(true);
         gameOverScoreText.text = "Score: " + Mathf.RoundToInt(distance);
+
+        GetSound("GameOver").Play();
     }
 
     private void AddExplosionForce(Rigidbody rb) {
