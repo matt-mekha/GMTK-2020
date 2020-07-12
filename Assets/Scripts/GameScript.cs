@@ -372,7 +372,7 @@ public class GameScript : MonoBehaviour
         outlines.Clear();
 
         if(hoveredObject != null) {
-            Outline(hoveredObject.transform);
+            //Outline(hoveredObject.transform);
         }
     }
 
