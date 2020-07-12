@@ -316,6 +316,7 @@ public class GameScript : MonoBehaviour
 
         alive = false;
         OnHover(null);
+        Resume();
 
         collisionCache = collision;
         AddExplosionForce(player.GetComponentInChildren<Rigidbody>());

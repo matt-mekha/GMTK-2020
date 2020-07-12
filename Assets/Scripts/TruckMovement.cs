@@ -7,10 +7,10 @@ public class TruckMovement : MonoBehaviour
 
     private const float wheelRotationSpeed = -500f;
 
-    private const float noiseFrequencyX = 2f;
-    private const float noiseFrequencyY = 4f;
-    private const float noiseAmplitudeX = 0.5f;
-    private const float noiseAmplitudeY = 0.5f;
+    private float noiseFrequencyX = 2f;
+    private float noiseFrequencyY = 4f;
+    private float noiseAmplitudeX = 0.5f;
+    private float noiseAmplitudeY = 0.5f;
 
     private float x = 0;
     private float y = 0;
@@ -24,6 +24,12 @@ public class TruckMovement : MonoBehaviour
     void Start() {
         startPos = transform.localPosition;
         startRotation = transform.localRotation;
+
+        if(mainMenu) {
+            noiseFrequencyX = 1f;
+            noiseAmplitudeX = 11f;
+            noiseAmplitudeY = 0.2f;
+        }
     }
 
     void Update()
@@ -35,6 +41,7 @@ public class TruckMovement : MonoBehaviour
 
         transform.localPosition = startPos + new Vector3(Mathf.PerlinNoise(x, 0) * noiseAmplitudeX, Mathf.PerlinNoise(0, y) * noiseAmplitudeY, 0);
         transform.rotation = startRotation;
+
 
         float wheelDelta = Time.deltaTime * wheelRotationSpeed;
         foreach (GameObject wheel in wheels)
