@@ -67,6 +67,7 @@ public class GameScript : MonoBehaviour
     private Collision collisionCache;
 
     private bool tutorialSuccess;
+    public Transform tutorialMessages;
 
 
     
@@ -130,6 +131,8 @@ public class GameScript : MonoBehaviour
     }
 
     private IEnumerator Tutorial() {
+        ToggleTutorialMessage(0, true);
+        ToggleTutorialMessage(1, false);
         tutorialSuccess = false;
         yield return new WaitForSeconds(2.5f);
         Time.timeScale = 0;
@@ -137,6 +140,14 @@ public class GameScript : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         Time.timeScale = 1;
+        ToggleTutorialMessage(0, false);
+        ToggleTutorialMessage(1, true);
+        yield return new WaitForSeconds(5);
+        ToggleTutorialMessage(1, false);
+    }
+
+    private void ToggleTutorialMessage(int num, bool on) {
+        tutorialMessages.GetChild(num).gameObject.SetActive(on);
     }
 
     private void SpawnObstacle(GameObject tile, int stage, bool tutorial = false) {
@@ -189,7 +200,7 @@ public class GameScript : MonoBehaviour
         groundTiles.Add(tile);
 
         GameObject mountainTile = Instantiate(mountainPrefab, tile.transform);
-        mountainTile.transform.localPosition = new Vector3(-10, 0, 0);
+        mountainTile.transform.localPosition = new Vector3(-10, -3, 0);
         RemoveColliders(mountainTile.transform);
 
         if(nextTileCount >= numEmptyTiles && !transition) {
