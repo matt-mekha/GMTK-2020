@@ -13,7 +13,7 @@ public class GameScript : MonoBehaviour
     private const int tilesPerStage = 5;
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
-    private const int startStage = 1; // for testing, should be 0
+    private const int startStage = 0; // for testing, should be 0
     private const int numEmptyTiles = 2;
 
     private const int obstaclesPerTileMin = 3;
