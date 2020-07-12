@@ -331,6 +331,9 @@ public class GameScript : MonoBehaviour
             nextHonk += Random.Range(nextHonkMin, nextHonkMax);
         }
 
+    }
+
+    void FixedUpdate() {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
