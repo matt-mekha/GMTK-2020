@@ -9,63 +9,63 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="48"
-   inkscape:export-xdpi="48"
-   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPanelButton.png"
-   width="256"
-   height="256"
-   viewBox="0 0 67.733332 67.733336"
-   version="1.1"
+   sodipodi:docname="UIPlayButton.svg"
+   inkscape:version="1.0rc1 (09960d6f05, 2020-04-09)"
    id="svg8"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="UIPlayButton.svg">
+   version="1.1"
+   viewBox="0 0 67.733332 67.733336"
+   height="256"
+   width="256"
+   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPlayButton.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48">
   <defs
      id="defs2">
     <linearGradient
-       osb:paint="gradient"
-       id="linearGradient854">
+       id="linearGradient854"
+       osb:paint="gradient">
       <stop
-         style="stop-color:#59f7fc;stop-opacity:1;"
+         id="stop852"
          offset="0"
-         id="stop852" />
+         style="stop-color:#59f7fc;stop-opacity:1;" />
       <stop
-         style="stop-color:#257fca;stop-opacity:1"
+         id="stop850"
          offset="1"
-         id="stop850" />
+         style="stop-color:#257fca;stop-opacity:1" />
     </linearGradient>
     <radialGradient
-       gradientTransform="matrix(3.9437094,0,0,3.9437094,0.47659223,0.47659222)"
-       gradientUnits="userSpaceOnUse"
-       r="8.4666672"
-       fy="8.4666672"
-       fx="8.4666672"
-       cy="8.4666672"
-       cx="8.4666672"
-       id="radialGradient2829"
+       inkscape:collect="always"
        xlink:href="#linearGradient854"
-       inkscape:collect="always" />
+       id="radialGradient2829"
+       cx="8.4666672"
+       cy="8.4666672"
+       fx="8.4666672"
+       fy="8.4666672"
+       r="8.4666672"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.9437094,0,0,3.9437094,0.47659223,0.47659222)" />
   </defs>
   <sodipodi:namedview
-     inkscape:pagecheckerboard="true"
-     units="px"
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="88.000006"
-     inkscape:cy="156.42858"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:window-width="2560"
-     inkscape:window-height="1057"
-     inkscape:window-x="-8"
+     inkscape:window-maximized="1"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-x="-8"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="156.42858"
+     inkscape:cx="88.000006"
+     inkscape:zoom="1.4"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     units="px"
+     inkscape:pagecheckerboard="true" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -74,27 +74,27 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     id="layer1"
      inkscape:groupmode="layer"
-     id="layer1">
+     inkscape:label="Layer 1">
     <rect
-       ry="12.108488"
-       y="0.99028498"
-       x="0.99028498"
-       height="65.752762"
-       width="65.752762"
+       style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.98057;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect7"
-       style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.98057;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       width="65.752762"
+       height="65.752762"
+       x="0.99028498"
+       y="0.99028498"
+       ry="12.108488" />
     <polyline
-       transform="matrix(0.26458334,0,0,0.26458334,-1.2124023e-5,-1.1030273e-6)"
-       style="fill:#ffffff"
-       class="cls-1"
+       id="polyline10"
        points="77.28 192 77.28 64 192 128"
-       id="polyline10" />
+       class="cls-1"
+       style="fill:#ffffff"
+       transform="matrix(0.26458334,0,0,0.26458334,-1.2124023e-5,-1.1030273e-6)" />
   </g>
 </svg>
