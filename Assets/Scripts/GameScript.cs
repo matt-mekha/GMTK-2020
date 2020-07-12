@@ -65,6 +65,8 @@ public class GameScript : MonoBehaviour
     public GameObject gameOverFolder;
     public Text gameOverScoreText;
 
+    public Transform soundFolder;
+
     private Collision collisionCache;
 
     private bool tutorialSuccess;
@@ -86,6 +88,10 @@ public class GameScript : MonoBehaviour
         mountainPrefab = Resources.Load<GameObject>("GroundTiles/Mountains");
         obstacleWrapperPrefab = Resources.Load<GameObject>("ObstacleWrapper");
         outlinePrefab = Resources.Load<GameObject>("Outline");
+    }
+
+    private void PlaySound(string name) {
+        soundFolder.Find(name).GetComponent<AudioSource>().Play();
     }
 
     public void Quit()
@@ -221,7 +227,10 @@ public class GameScript : MonoBehaviour
         RemoveColliders(mountainTile.transform);
 
         if(nextTileCount >= numEmptyTiles && !transition) {
-            int numObstacles = (int)(Random.Range(obstaclesPerTileMin, obstaclesPerTileMax) * expertModeObstacleFactor);
+            int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
+            if(expertMode) {
+                numObstacles = (int) (numObstacles * expertModeObstacleFactor);
+            }
             for (int i = 0; i < numObstacles; i++)
             {
                 SpawnObstacle(tile, stage);
@@ -348,6 +357,8 @@ public class GameScript : MonoBehaviour
         collisionCache = collision;
         AddExplosionForce(player.GetComponentInChildren<Rigidbody>());
         collision.GetContact(0).otherCollider.gameObject.SendMessageUpwards("OnCollision", this);
+
+        PlaySound("Crash");
 
         StartCoroutine(GameOver());
     }
