@@ -11,30 +11,30 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:export-ydpi="48"
    inkscape:export-xdpi="48"
-   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPanelButton.png"
+   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPlayButtonPressed.png"
    width="256"
    height="256"
    viewBox="0 0 67.733332 67.733336"
    version="1.1"
    id="svg8"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="UIPlayButton.svg">
+   sodipodi:docname="UIPlayButtonPressed.svg">
   <defs
      id="defs2">
     <linearGradient
        osb:paint="gradient"
        id="linearGradient854">
       <stop
-         style="stop-color:#59f7fc;stop-opacity:1;"
+         style="stop-color:#efe945;stop-opacity:1;"
          offset="0"
          id="stop852" />
       <stop
-         style="stop-color:#257fca;stop-opacity:1"
+         style="stop-color:#cc6012;stop-opacity:1"
          offset="1"
          id="stop850" />
     </linearGradient>
     <radialGradient
-       gradientTransform="matrix(3.9437094,0,0,3.9437094,0.47659223,0.47659222)"
+       gradientTransform="matrix(7.2694375,-0.01198544,0.01194939,7.2475772,-27.782413,-27.394679)"
        gradientUnits="userSpaceOnUse"
        r="8.4666672"
        fy="8.4666672"
@@ -44,6 +44,18 @@
        id="radialGradient2829"
        xlink:href="#linearGradient854"
        inkscape:collect="always" />
+    <linearGradient
+       osb:paint="gradient"
+       id="linearGradient854-4">
+      <stop
+         style="stop-color:#59f7fc;stop-opacity:1;"
+         offset="0"
+         id="stop852-2" />
+      <stop
+         style="stop-color:#257fca;stop-opacity:1"
+         offset="1"
+         id="stop850-8" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      inkscape:pagecheckerboard="true"
@@ -55,8 +67,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="88.000006"
-     inkscape:cy="156.42858"
+     inkscape:cx="6.0870245"
+     inkscape:cy="182.32057"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -91,7 +103,7 @@
        id="rect7"
        style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.98057;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <polyline
-       transform="matrix(0.26458334,0,0,0.26458334,-1.2124023e-5,-1.1030273e-6)"
+       transform="matrix(0.26458334,0,0,0.26458334,-1.3687649e-5,-7.7041245e-7)"
        style="fill:#ffffff"
        class="cls-1"
        points="77.28 192 77.28 64 192 128"
