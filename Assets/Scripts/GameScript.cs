@@ -323,7 +323,16 @@ public class GameScript : MonoBehaviour
             SpawnNextTile();
         }
 
+        UpdateScore();
 
+        honkTime += Time.deltaTime;
+        while (honkTime >= nextHonk) {
+            GetSound("Honk").Play();
+            nextHonk += Random.Range(nextHonkMin, nextHonkMax);
+        }
+    }
+
+    void FixedUpdate() {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -348,14 +357,6 @@ public class GameScript : MonoBehaviour
         }
 
         lastMousePosition = Input.mousePosition;
-
-        UpdateScore();
-
-        honkTime += Time.deltaTime;
-        while (honkTime >= nextHonk) {
-            GetSound("Honk").Play();
-            nextHonk += Random.Range(nextHonkMin, nextHonkMax);
-        }
     }
 
     public void OnHover(GameObject newHoveredObject) {
