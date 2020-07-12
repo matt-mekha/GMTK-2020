@@ -11,30 +11,30 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:export-ydpi="48"
    inkscape:export-xdpi="48"
-   inkscape:export-filename="F:\Github\GMTK-2020\Assets\Art\UIPauseButton.png"
+   inkscape:export-filename="C:\Users\mattm\Desktop\Coding\Games\Game Jams\GMTK-2020\Assets\Art\UIPlayButtonPressed.png"
    width="256"
    height="256"
    viewBox="0 0 67.733332 67.733336"
    version="1.1"
    id="svg8"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="UIPauseButton.svg">
+   sodipodi:docname="UIPlayButtonPressed.svg">
   <defs
      id="defs2">
     <linearGradient
        osb:paint="gradient"
        id="linearGradient854">
       <stop
-         style="stop-color:#59f7fc;stop-opacity:1;"
+         style="stop-color:#efe945;stop-opacity:1;"
          offset="0"
          id="stop852" />
       <stop
-         style="stop-color:#257fca;stop-opacity:1"
+         style="stop-color:#cc6012;stop-opacity:1"
          offset="1"
          id="stop850" />
     </linearGradient>
     <radialGradient
-       gradientTransform="matrix(3.9437094,0,0,3.9437094,0.47659223,0.47659222)"
+       gradientTransform="matrix(7.2694375,-0.01198544,0.01194939,7.2475772,-27.782413,-27.394679)"
        gradientUnits="userSpaceOnUse"
        r="8.4666672"
        fy="8.4666672"
@@ -46,15 +46,15 @@
        inkscape:collect="always" />
     <linearGradient
        osb:paint="gradient"
-       id="linearGradient854-2">
+       id="linearGradient854-4">
       <stop
-         style="stop-color:#6761ff;stop-opacity:1;"
+         style="stop-color:#59f7fc;stop-opacity:1;"
          offset="0"
-         id="stop852-9" />
+         id="stop852-2" />
       <stop
-         style="stop-color:#2111a8;stop-opacity:1;"
+         style="stop-color:#257fca;stop-opacity:1"
          offset="1"
-         id="stop850-6" />
+         id="stop850-8" />
     </linearGradient>
   </defs>
   <sodipodi:namedview
@@ -73,9 +73,9 @@
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1027"
-     inkscape:window-x="1912"
+     inkscape:window-width="2560"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -102,23 +102,11 @@
        width="65.752762"
        id="rect7"
        style="fill:url(#radialGradient2829);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.98057;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.213214"
-       id="rect835"
-       width="34.017838"
-       height="10.554553"
-       x="-50.327351"
-       y="19.584063"
-       ry="5.2772765"
-       transform="matrix(-9.5845842e-4,-0.99999954,0.99999742,-0.00227276,0,0)" />
-    <rect
-       transform="matrix(9.5845842e-4,-0.99999954,-0.99999742,-0.00227276,0,0)"
-       ry="5.2772765"
-       y="-48.1493"
-       x="-50.173405"
-       height="10.554553"
-       width="34.017838"
-       id="rect839"
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.213214" />
+    <polyline
+       transform="matrix(0.26458334,0,0,0.26458334,-1.3687649e-5,-7.7041245e-7)"
+       style="fill:#ffffff"
+       class="cls-1"
+       points="77.28 192 77.28 64 192 128"
+       id="polyline10" />
   </g>
 </svg>
