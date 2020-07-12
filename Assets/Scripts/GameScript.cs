@@ -226,8 +226,8 @@ public class GameScript : MonoBehaviour
     }
 
     private void AddObstacleComponents(GameObject obj) {
-        MeshCollider collider = obj.AddComponent<MeshCollider>();
-        collider.convex = true;
+        BoxCollider collider = obj.AddComponent<BoxCollider>();
+        //collider.convex = true;
 
         obj.layer = obstacleLayer;
         foreach(Transform child in obj.transform) {
