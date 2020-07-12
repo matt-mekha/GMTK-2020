@@ -13,7 +13,7 @@ public class GameScript : MonoBehaviour
     private const int tilesPerStage = 5;
     private const int numTilesAtOnce = 7;
     private const int numStages = 3;
-    private const int startStage = 0; // for testing, should be 0
+    private const int startStage = 1; // for testing, should be 0
     private const int numEmptyTiles = 2;
 
     private const int obstaclesPerTileMin = 3;
@@ -28,6 +28,7 @@ public class GameScript : MonoBehaviour
     private const float explosionRadius = 1;
     private const float explosionUpwardsFactor = -1;
 
+    private const float expertModeObstacleFactor = 1.5f;
 
 
     private GameObject playerPrefab;
@@ -69,6 +70,8 @@ public class GameScript : MonoBehaviour
     private bool tutorialSuccess;
     public Transform tutorialMessages;
 
+    public static bool expertMode = false;
+
 
     
     void Awake()
@@ -102,7 +105,11 @@ public class GameScript : MonoBehaviour
         inGameScoreText.text = "" + Mathf.RoundToInt(distance);
     }
 
-    public void StartGame(bool tutorial = false) {
+    public void SetExpertMode(bool expert) {
+        expertMode = expert;
+    }
+
+    public void StartGame(bool tutorial) {
         Resume();
 
         distance = 0;
@@ -125,6 +132,10 @@ public class GameScript : MonoBehaviour
             if(tutorial && i == 1) {
                 SpawnObstacle(tile, 0, true);
             }
+        }
+
+        if(expertMode) {
+            player.GetComponentInChildren<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
         }
 
         if(tutorial) {
@@ -196,7 +207,11 @@ public class GameScript : MonoBehaviour
 
         
         GameObject tile = Instantiate(tilePrefab, new Vector3(0, 0, nextTileCount * tileSize), Quaternion.identity);
-        RemoveColliders(tile.transform);
+        if(expertMode) {
+            AddColliders(tile.transform);
+        } else {
+            RemoveColliders(tile.transform);
+        }
 
         tile.AddComponent<MeshCollider>();
         groundTiles.Add(tile);
@@ -206,7 +221,7 @@ public class GameScript : MonoBehaviour
         RemoveColliders(mountainTile.transform);
 
         if(nextTileCount >= numEmptyTiles && !transition) {
-            int numObstacles = Random.Range(obstaclesPerTileMin, obstaclesPerTileMax);
+            int numObstacles = (int)(Random.Range(obstaclesPerTileMin, obstaclesPerTileMax) * expertModeObstacleFactor);
             for (int i = 0; i < numObstacles; i++)
             {
                 SpawnObstacle(tile, stage);
@@ -228,6 +243,16 @@ public class GameScript : MonoBehaviour
         }
     }
 
+    private void AddColliders(Transform parent) {
+        if(parent.GetComponent<MeshFilter>() != null && parent.GetComponent<MeshCollider>() == null) {
+            parent.gameObject.AddComponent<MeshCollider>();
+        }
+
+        foreach(Transform child in parent) {
+            AddColliders(child);
+        }
+    }
+
     private void DespawnLastTile() {
         GameObject tile = groundTiles[0];
         groundTiles.RemoveAt(0);
@@ -238,7 +263,9 @@ public class GameScript : MonoBehaviour
     {
         if(!alive) return;
 
-        speed += acceleration * Time.deltaTime;
+        float accel = acceleration * Time.deltaTime;
+        speed += accel;
+        if(expertMode) speed += accel;
         
         float move = speed * Time.deltaTime;
         distance += move;
@@ -258,7 +285,7 @@ public class GameScript : MonoBehaviour
         if(selected) {
             if(!Input.GetMouseButton(0)) {
                 selected = false;
-                tutorialSuccess = Mathf.Abs(hoveredObject.transform.localPosition.x) > 0.4f;
+                tutorialSuccess = true;
             } else {
                 float mouseDeltaX = (Input.mousePosition - lastMousePosition).x;
                 hoveredObject.transform.Translate(mouseDeltaX * mouseDragFactor, 0, 0);

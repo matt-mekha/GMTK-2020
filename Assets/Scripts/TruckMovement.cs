@@ -40,7 +40,7 @@ public class TruckMovement : MonoBehaviour
         y += Time.deltaTime * noiseFrequencyY;
 
         transform.localPosition = startPos + new Vector3(Mathf.PerlinNoise(x, 0) * noiseAmplitudeX, Mathf.PerlinNoise(0, y) * noiseAmplitudeY, 0);
-        transform.rotation = startRotation;
+        if(!GameScript.expertMode) transform.rotation = startRotation;
 
 
         float wheelDelta = Time.deltaTime * wheelRotationSpeed;
