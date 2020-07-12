@@ -7,7 +7,7 @@ public class GameScript : MonoBehaviour
 {
 
     private const float startSpeed = 30f;
-    private const float acceleration = 0.1f;
+    private const float acceleration = 0.4f;
 
     private const float tileSize = 100f;
     private const int tilesPerStage = 5;
@@ -103,6 +103,8 @@ public class GameScript : MonoBehaviour
     }
 
     public void StartGame(bool tutorial = false) {
+        Resume();
+
         distance = 0;
         nextTileCount = 0;
         nextTileSpawnThreshold = tileSize;
@@ -256,7 +258,7 @@ public class GameScript : MonoBehaviour
         if(selected) {
             if(!Input.GetMouseButton(0)) {
                 selected = false;
-                tutorialSuccess = true;
+                tutorialSuccess = Mathf.Abs(hoveredObject.transform.localPosition.x) > 0.4f;
             } else {
                 float mouseDeltaX = (Input.mousePosition - lastMousePosition).x;
                 hoveredObject.transform.Translate(mouseDeltaX * mouseDragFactor, 0, 0);
