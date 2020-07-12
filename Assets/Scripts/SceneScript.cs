@@ -36,6 +36,7 @@ public class SceneScript : MonoBehaviour
 
     void SpawnTile() {
         GameObject tile = Instantiate(streetPrefab, new Vector3(0, 0, nextTile * tileSize), Quaternion.identity);
+        tile.transform.SetParent(transform);
         streets.Add(tile);
         nextTile++;
     }
